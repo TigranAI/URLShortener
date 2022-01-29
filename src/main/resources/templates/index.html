@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home page</title>
+</head>
+<body>
+<form th:unless="${urlInfo}" action="/" method="post">
+    <input type="text" name="url">
+    <input type="submit" value="hello">
+</form>
+<a th:if="${urlInfo}" th:href="'/'+${urlInfo.getHash()}">Click me!</a>
+</body>
+</html>
