@@ -3,13 +3,23 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <nav th:fragment="header" class="navbar navbar-expand-lg sticky-top mb-2 header">
-    <div class="container d-flex flex-row-reverse">
-        <div sec:authorize="isAuthenticated()">
-            <a sec:authorize="hasRole('ROLE_ADMIN')" href="/admin" role="button" class="btn btn-primary">Панель администратора</a>
-            <a href="/logout" role="button" class="btn btn-primary">Выход</a>
-        </div>
-        <div sec:authorize="isAnonymous()">
-            <a href="/login" role="button" class="btn btn-primary">Вход</a>
+    <div class="container">
+        <a class="navbar-brand" href="/">UrlShortener</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
+                aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar">
+            <th:block sec:authorize="isAuthenticated()">
+                <ul sec:authorize="hasRole('ROLE_ADMIN')"
+                    class="navbar-nav me-auto mb-2 mb-lg-0" style="--bs-scroll-height: 100px;">
+                    <li class="nav-item"><a class="nav-link" href="/admin">Панель администратора</a></li>
+                </ul>
+                <a href="/logout" role="button" class="btn btn-primary">Выход</a>
+            </th:block>
+            <th:block sec:authorize="isAnonymous()">
+                <a href="/login" role="button" class="btn btn-primary">Вход</a>
+            </th:block>
         </div>
     </div>
 </nav>

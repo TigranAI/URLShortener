@@ -1,11 +1,9 @@
 package ru.tigran.urlshortener.database.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -16,12 +14,15 @@ public class UrlInfo {
     private String url;
     private String hash;
     private Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
-    private Long redirectCount = 0L;
-    private Long uniqueRedirectCount = 0L;
 
-    public void increaseRedirectCount() {
-        redirectCount++;
-    }
+    @Transient
+    private Integer redirectCount = 0;
+    @Transient
+    private Integer uniqueRedirectCount = 0;
+
+    @Transient
+    @OneToMany(targetEntity = RedirectStats.class, cascade = CascadeType.ALL, mappedBy = "urlHash", orphanRemoval = true)
+    private List<RedirectStats> rs;
 
     public UrlInfo() {
     }
@@ -58,22 +59,6 @@ public class UrlInfo {
         this.timestamp = creationTime;
     }
 
-    public Long getRedirectCount() {
-        return redirectCount;
-    }
-
-    public void setRedirectCount(Long redirectCount) {
-        this.redirectCount = redirectCount;
-    }
-
-    public Long getUniqueRedirectCount() {
-        return uniqueRedirectCount;
-    }
-
-    public void setUniqueRedirectCount(Long uniqueRedirectCount) {
-        this.uniqueRedirectCount = uniqueRedirectCount;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -85,5 +70,21 @@ public class UrlInfo {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public Integer getRedirectCount() {
+        return redirectCount;
+    }
+
+    public void setRedirectCount(Integer redirectCount) {
+        this.redirectCount = redirectCount;
+    }
+
+    public Integer getUniqueRedirectCount() {
+        return uniqueRedirectCount;
+    }
+
+    public void setUniqueRedirectCount(Integer uniqueRedirectCount) {
+        this.uniqueRedirectCount = uniqueRedirectCount;
     }
 }

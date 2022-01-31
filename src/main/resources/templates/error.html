@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" class="h-100">
+<html lang="en" class="h-100"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Error page</title>
@@ -10,6 +11,7 @@
 <div class="container">
     <div class="position-absolute top-50 start-50 translate-middle w-50 text-center">
         <h2>Страница не найдена</h2>
+        <p th:if="${message}" th:text="${message}"></p>
     </div>
 </div>
 </body>
