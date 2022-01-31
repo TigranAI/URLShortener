@@ -57,6 +57,4 @@ public class UrlInfoService {
     public void save(UrlInfo info){
         urlInfoRepository.save(info);
     }
-
-
 }

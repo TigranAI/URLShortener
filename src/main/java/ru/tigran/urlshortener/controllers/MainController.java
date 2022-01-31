@@ -8,6 +8,8 @@ import ru.tigran.urlshortener.database.entity.UrlInfo;
 import ru.tigran.urlshortener.database.services.UrlInfoService;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpSession;
+import java.util.Objects;
 
 @Controller
 @RequestMapping(value = "/")
@@ -16,7 +18,8 @@ public class MainController {
     UrlInfoService urlInfoService;
 
     @GetMapping
-    public String home(){
+    public String home(HttpSession session){
+        /*System.out.println(session.getId());*/
         return "index";
     }
 
@@ -25,6 +28,11 @@ public class MainController {
         UrlInfo urlInfo = urlInfoService.getByUrl(url);
         model.addAttribute("urlInfo", urlInfo);
         return "index";
+    }
+
+    @GetMapping("favicon.ico")
+    @ResponseBody
+    void returnNoFavicon() {
     }
 
     @GetMapping("/{hash}")

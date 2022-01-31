@@ -1,15 +1,16 @@
 package ru.tigran.urlshortener.database.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.tigran.urlshortener.database.entity.Role;
 import ru.tigran.urlshortener.database.entity.User;
 import ru.tigran.urlshortener.database.repository.RoleRepository;
 import ru.tigran.urlshortener.database.repository.UserRepository;
-import ru.tigran.urlshortener.utils.PasswordEncoder;
 
 import java.util.Collections;
 import java.util.Set;
@@ -20,6 +21,8 @@ public class UserService implements UserDetailsService {
     UserRepository userRepository;
     @Autowired
     RoleRepository roleRepository;
+    @Autowired
+    BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -33,15 +36,11 @@ public class UserService implements UserDetailsService {
 
         if (userFromDB != null) return false;
 
-        String salt = PasswordEncoder.generateSalt(7);
-        user.setSalt(salt);
-
         Set<Role> roles = new java.util.HashSet<>(Collections.singleton(new Role(1L, "ROLE_USER")));
         if (userRepository.count() == 0) roles.add(new Role(2L, "ROLE_ADMIN"));
+
         user.setRoles(roles);
-
-        user.setPassword(PasswordEncoder.encode(user.getPassword(), salt));
-
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return true;
     }

@@ -14,13 +14,12 @@ public class User implements UserDetails {
     private Long id;
     private String username;
     private String password;
-    private String salt;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
     @Transient
-    private String providedPassword;
+    private String confirmPassword;
 
     public User() {
 
@@ -77,14 +76,6 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
-
     public Set<Role> getRoles() {
         return roles;
     }
@@ -92,11 +83,11 @@ public class User implements UserDetails {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
-    public String getProvidedPassword() {
-        return providedPassword;
+    public String getConfirmPassword() {
+        return confirmPassword;
     }
 
-    public void setProvidedPassword(String providedPassword) {
-        this.providedPassword = providedPassword;
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 }
